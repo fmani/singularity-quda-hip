@@ -7,12 +7,10 @@ AUTHOR manigrasso.floriano@ucy.ac.cy
 DESCRIPTION Based Scientific Linux 7, contains the ROCm libraries required from QUDA
 
 %files
-install_quda.sh /data/
+install_quda.sh 
 
 %post
-
-echo "Check that the required files are in the data directory"
-ls /data/
+ls -lrth /*
 
 # Needed for rocm-dev
 yum -y install  https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/l/libbabeltrace-1.2.4-3.el7.x86_64.rpm
@@ -112,7 +110,7 @@ yum -y install rdma-core-devel.x86_64
 
 ############################ OpenMPI 3.1.4 installation ############################
 
-mkdir /workdir
+mkdir -p /workdir
 cd /workdir
 version=3.1
 build=4
@@ -199,7 +197,7 @@ yum install -y eigen3
 cd /workdir
 git clone https://github.com/lattice/quda.git
 cd /workdir/quda
-mv /data/install_quda.sh /workdir/quda/.
+mv /install_quda.sh /workdir/quda/.
 git checkout feature/hip-compile-fixes
 #bash install_quda.sh
 
