@@ -12,7 +12,6 @@ install_quda.sh
 %post
 ls -lrth /*
 
-#Automatic build
 # Needed for rocm-dev
 yum -y install  https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/l/libbabeltrace-1.2.4-3.el7.x86_64.rpm
 
