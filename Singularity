@@ -138,7 +138,7 @@ export INFOPATH=/opt/openmpi/${version}.${build}/share/info:${INFOPATH}
 ############################ Add ROCm repos and compile ############################
 echo '[ROCm]
 name=ROCm
-baseurl=https://repo.radeon.com/rocm/yum/4.1
+baseurl=https://repo.radeon.com/rocm/yum/4.0
 enabled=1
 gpgcheck=1
 gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key' > /etc/yum.repos.d/rocm.repo
