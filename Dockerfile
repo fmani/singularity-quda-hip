@@ -100,18 +100,18 @@ RUN yum -y install rdma-core-devel.x86_64
 
 RUN mkdir /workdir
 WORKDIR /workdir
-RUN version=3.1
-RUN build=4
-ADD https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${version}.${build}.tar.gz .
+ARG version=3.1 
+ARG build=4
+RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${version}.${build}.tar.gz .
 RUN tar -xvf /workdir/openmpi-${version}.${build}.tar.gz
 RUN rm -rf /workdir/openmpi-${version}.${build}.tar.gz
 WORKDIR /workdir/openmpi-${version}.${build}
-RUN FC="gfortran"
-RUN CC="gcc"
-RUN CFLAGS="-g -O2 -march=core-avx2"
-RUN CXXFLAGS="$CFLAGS"
-RUN FCFLAGS="-g -O2 -march=core-avx2"
-RUN LDFLAGS="-g -O2 -ldl -march=core-avx2"
+ARG FC="gfortran"
+ARG CC="gcc"
+ARG CFLAGS="-g -O2 -march=core-avx2"
+ARG CXXFLAGS="$CFLAGS"
+ARG FCFLAGS="-g -O2 -march=core-avx2"
+ARG LDFLAGS="-g -O2 -ldl -march=core-avx2"
 RUN ./configure --prefix=/opt/openmpi/${version}.${build} FC=gfortran CC=gcc  --with-psm2=yes --with-memory-manager=none  --enable-static=yes --with-pmix --with-pmi --with-pmi-libdir="/usr/lib64/" --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen
 
 RUN make -j 2
@@ -124,10 +124,10 @@ RUN export MANPATH=/opt/openmpi/${version}.${build}/share/man:${MANPATH}
 RUN export INFOPATH=/opt/openmpi/${version}.${build}/share/info:${INFOPATH}
 
 ############################ Add ROCm repos and compile ############################
-RUN name=ROCm
-RUN baseurl=https://repo.radeon.com/rocm/yum/4.0
-RUN enabled=1
-RUN gpgcheck=1
+ARG name=ROCm
+ARG baseurl=https://repo.radeon.com/rocm/yum/4.0
+ARG enabled=1
+ARG gpgcheck=1
 RUN gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key' > /etc/yum.repos.d/rocm.repo
 
 
@@ -165,8 +165,8 @@ RUN export LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
 
 RUN yum install -y ncurses-devel
 WORKDIR /workdir
-RUN version=3.15
-RUN build=1
+ARG version=3.15
+ARG build=1
 RUN wget https://cmake.org/files/v$version/cmake-$version.$build.tar.gz
 RUN tar -xzvf cmake-$version.$build.tar.gz
 RUN rm -rf cmake-$version.$build.tar.gz
