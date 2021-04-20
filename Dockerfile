@@ -189,7 +189,7 @@ RUN git checkout feature/hip-compile-fixes
 #bash install_quda.sh
 
 
-%environment
+
 
 ENV PATH=/opt/rh/devtoolset-7/root/usr/bin:/opt/rocm/hcc/bin:/opt/rocm/hip/bin:/opt/rocm/bin:/opt/rocm/hcc/bin:${PATH:+:${PATH}}
 ENV MANPATH=/opt/rh/devtoolset-7/root/usr/share/man:${MANPATH}
@@ -203,8 +203,8 @@ ENV PATH=/opt/rh/devtoolset-7/root/usr/bin:${PATH}
 ENV LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
 
 
-version=3.1
-build=4
+RUN version=3.1
+RUN build=4
 ENV PATH=/opt/openmpi/${version}.${build}/bin:${PATH}
 ENV LD_LIBRARY_PATH=/opt/openmpi/${version}.${build}/lib:${LD_LIBRARY_PATH}
 ENV MANPATH=/opt/openmpi/${version}.${build}/share/man:${MANPATH}
