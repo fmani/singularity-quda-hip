@@ -102,26 +102,26 @@ RUN mkdir /workdir
 WORKDIR /workdir
 ARG version=3.1 
 ARG build=4
-RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${version}.${build}.tar.gz .
-RUN tar -xvf /workdir/openmpi-${version}.${build}.tar.gz
-RUN rm -rf /workdir/openmpi-${version}.${build}.tar.gz
-WORKDIR /workdir/openmpi-${version}.${build}
+RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.4.tar.gz .
+RUN tar -xvf /workdir/openmpi-3.1.4.tar.gz
+RUN rm -rf /workdir/openmpi-3.1.4.tar.gz
+WORKDIR /workdir/openmpi-3.1.4
 ARG FC="gfortran"
 ARG CC="gcc"
 ARG CFLAGS="-g -O2 -march=core-avx2"
 ARG CXXFLAGS="$CFLAGS"
 ARG FCFLAGS="-g -O2 -march=core-avx2"
 ARG LDFLAGS="-g -O2 -ldl -march=core-avx2"
-RUN ./configure --prefix=/opt/openmpi/${version}.${build} FC=gfortran CC=gcc  --with-psm2=yes --with-memory-manager=none  --enable-static=yes --with-pmix --with-pmi --with-pmi-libdir="/usr/lib64/" --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen
+RUN ./configure --prefix=/opt/openmpi/3.1.4 FC=gfortran CC=gcc  --with-psm2=yes --with-memory-manager=none  --enable-static=yes --with-pmix --with-pmi --with-pmi-libdir="/usr/lib64/" --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen
 
 RUN make -j 2
 RUN make install
 
 #Export OpenMPI library paths required at building time by QUDA
-RUN export PATH=/opt/openmpi/${version}.${build}/bin:${PATH}
-RUN export LD_LIBRARY_PATH=/opt/openmpi/${version}.${build}/lib:${LD_LIBRARY_PATH}
-RUN export MANPATH=/opt/openmpi/${version}.${build}/share/man:${MANPATH}
-RUN export INFOPATH=/opt/openmpi/${version}.${build}/share/info:${INFOPATH}
+RUN export PATH=/opt/openmpi/3.1.4/bin:${PATH}
+RUN export LD_LIBRARY_PATH=/opt/openmpi/3.1.4/lib:${LD_LIBRARY_PATH}
+RUN export MANPATH=/opt/openmpi/3.1.4/share/man:${MANPATH}
+RUN export INFOPATH=/opt/openmpi/3.1.4/share/info:${INFOPATH}
 
 ############################ Add ROCm repos and compile ############################
 ARG name=ROCm
@@ -167,10 +167,10 @@ RUN yum install -y ncurses-devel
 WORKDIR /workdir
 ARG version=3.15
 ARG build=1
-RUN wget https://cmake.org/files/v$version/cmake-$version.$build.tar.gz
-RUN tar -xzvf cmake-$version.$build.tar.gz
-RUN rm -rf cmake-$version.$build.tar.gz
-WORKDIR /workdir/cmake-$version.$build/
+RUN wget https://cmake.org/files/v3.15/cmake-3.15.1.tar.gz
+RUN tar -xzvf cmake-3.15.1.tar.gz
+RUN rm -rf cmake-3.15.1.tar.gz
+WORKDIR /workdir/cmake-3.15.1/
 RUN ./bootstrap
 RUN make -j 2
 RUN make install
@@ -205,10 +205,10 @@ ENV LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
 
 RUN version=3.1
 RUN build=4
-ENV PATH=/opt/openmpi/${version}.${build}/bin:${PATH}
-ENV LD_LIBRARY_PATH=/opt/openmpi/${version}.${build}/lib:${LD_LIBRARY_PATH}
-ENV MANPATH=/opt/openmpi/${version}.${build}/share/man:${MANPATH}
-ENV INFOPATH=/opt/openmpi/${version}.${build}/share/info:${INFOPATH}
+ENV PATH=/opt/openmpi/3.1.4/bin:${PATH}
+ENV LD_LIBRARY_PATH=/opt/openmpi/3.1.4/lib:${LD_LIBRARY_PATH}
+ENV MANPATH=/opt/openmpi/3.1.4/share/man:${MANPATH}
+ENV INFOPATH=/opt/openmpi/3.1.4/share/info:${INFOPATH}
 
 ENV LC_CTYPE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
