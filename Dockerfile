@@ -61,8 +61,8 @@ RUN yum clean all
 
 ####### Define the default language
 
-ENV LC_CTYPE=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
+RUN export LC_CTYPE=en_US.UTF-8
+RUN export LC_ALL=en_US.UTF-8
 
 ####### GNU 7.3.1 #######
 
@@ -80,8 +80,8 @@ RUN yum clean all
 
 ############### GNU 7.3.1 General environment variables settings ##################
 
-ENV PATH=/opt/rh/devtoolset-7/root/usr/bin:${PATH}
-ENV LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
+RUN export PATH=/opt/rh/devtoolset-7/root/usr/bin:${PATH}
+RUN export LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
 
 #### Extra packages for network and MPI #######
 
@@ -98,30 +98,30 @@ RUN yum -y install rdma-core-devel.x86_64
 
 ############################ OpenMPI 3.1.4 installation ############################
 
-mkdir /workdir
-cd /workdir
-version=3.1
-build=4
-wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${version}.${build}.tar.gz
-tar -xvf /workdir/openmpi-${version}.${build}.tar.gz
-rm -rf /workdir/openmpi-${version}.${build}.tar.gz
-cd openmpi-${version}.${build}
-export FC="gfortran"
-export CC="gcc"
-export CFLAGS="-g -O2 -march=core-avx2"
-export CXXFLAGS="$CFLAGS"
-export FCFLAGS="-g -O2 -march=core-avx2"
-export LDFLAGS="-g -O2 -ldl -march=core-avx2"
-./configure --prefix=/opt/openmpi/${version}.${build} FC=gfortran CC=gcc  --with-psm2=yes --with-memory-manager=none  --enable-static=yes --with-pmix --with-pmi --with-pmi-libdir="/usr/lib64/" --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen
+RUN mkdir /workdir
+RUN cd /workdir
+RUN version=3.1
+RUN build=4
+RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${version}.${build}.tar.gz
+RUN tar -xvf /workdir/openmpi-${version}.${build}.tar.gz
+RUN rm -rf /workdir/openmpi-${version}.${build}.tar.gz
+RUN cd openmpi-${version}.${build}
+RUN FC="gfortran"
+RUN CC="gcc"
+RUN CFLAGS="-g -O2 -march=core-avx2"
+RUN CXXFLAGS="$CFLAGS"
+RUN FCFLAGS="-g -O2 -march=core-avx2"
+RUN LDFLAGS="-g -O2 -ldl -march=core-avx2"
+RUN ./configure --prefix=/opt/openmpi/${version}.${build} FC=gfortran CC=gcc  --with-psm2=yes --with-memory-manager=none  --enable-static=yes --with-pmix --with-pmi --with-pmi-libdir="/usr/lib64/" --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen
 
-make -j 2
-make install
+RUN make -j 2
+RUN make install
 
 #Export OpenMPI library paths required at building time by QUDA
-export PATH=/opt/openmpi/${version}.${build}/bin:${PATH}
-export LD_LIBRARY_PATH=/opt/openmpi/${version}.${build}/lib:${LD_LIBRARY_PATH}
-export MANPATH=/opt/openmpi/${version}.${build}/share/man:${MANPATH}
-export INFOPATH=/opt/openmpi/${version}.${build}/share/info:${INFOPATH}
+RUN export PATH=/opt/openmpi/${version}.${build}/bin:${PATH}
+RUN export LD_LIBRARY_PATH=/opt/openmpi/${version}.${build}/lib:${LD_LIBRARY_PATH}
+RUN export MANPATH=/opt/openmpi/${version}.${build}/share/man:${MANPATH}
+RUN export INFOPATH=/opt/openmpi/${version}.${build}/share/info:${INFOPATH}
 
 ############################ Add ROCm repos and compile ############################
 RUN name=ROCm
@@ -149,16 +149,16 @@ RUN yum -y install rocm-dev \
 RUN yum clean all
 
 
-ENV PATH=/opt/rh/devtoolset-7/root/usr/bin:/opt/rocm/hcc/bin:/opt/rocm/hip/bin:/opt/rocm/bin:/opt/rocm/hcc/bin:${PATH:+:${PATH}}
-ENV MANPATH=/opt/rh/devtoolset-7/root/usr/share/man:${MANPATH}
-ENV INFOPATH=/opt/rh/devtoolset-7/root/usr/share/info${INFOPATH:+:${INFOPATH}}
-ENV PCP_DIR=/opt/rh/devtoolset-7/root
-ENV PERL5LIB=/opt/rh/devtoolset-7/root//usr/lib64/perl5/vendor_perl:/opt/rh/devtoolset-7/root/usr/lib/perl5:/opt/rh/devtoolset-7/root//usr/share/perl5/
-ENV LD_LIBRARY_PATH=/opt/rocm/lib:/usr/local/lib:/opt/rh/devtoolset-7/root$rpmlibdir$rpmlibdir32${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-ENV PYTHONPATH=/opt/rh/devtoolset-7/root/usr/lib64/python$pythonvers/site-packages:/opt/rh/devtoolset-7/root/usr/lib/python$pythonvers/
-ENV LDFLAGS="-Wl,-rpath=/opt/rh/devtoolset-7/root/usr/lib64 -Wl,-rpath=/opt/rh/devtoolset-7/root/usr/lib"
-ENV PATH=/opt/rh/devtoolset-7/root/usr/bin:${PATH}
-ENV LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
+RUN export PATH=/opt/rh/devtoolset-7/root/usr/bin:/opt/rocm/hcc/bin:/opt/rocm/hip/bin:/opt/rocm/bin:/opt/rocm/hcc/bin:${PATH:+:${PATH}}
+RUN export MANPATH=/opt/rh/devtoolset-7/root/usr/share/man:${MANPATH}
+RUN export INFOPATH=/opt/rh/devtoolset-7/root/usr/share/info${INFOPATH:+:${INFOPATH}}
+RUN export PCP_DIR=/opt/rh/devtoolset-7/root
+RUN export PERL5LIB=/opt/rh/devtoolset-7/root//usr/lib64/perl5/vendor_perl:/opt/rh/devtoolset-7/root/usr/lib/perl5:/opt/rh/devtoolset-7/root//usr/share/perl5/
+RUN export LD_LIBRARY_PATH=/opt/rocm/lib:/usr/local/lib:/opt/rh/devtoolset-7/root$rpmlibdir$rpmlibdir32${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+RUN export PYTHONPATH=/opt/rh/devtoolset-7/root/usr/lib64/python$pythonvers/site-packages:/opt/rh/devtoolset-7/root/usr/lib/python$pythonvers/
+RUN export LDFLAGS="-Wl,-rpath=/opt/rh/devtoolset-7/root/usr/lib64 -Wl,-rpath=/opt/rh/devtoolset-7/root/usr/lib"
+RUN export PATH=/opt/rh/devtoolset-7/root/usr/bin:${PATH}
+RUN export LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
 
 
 ############################ Get cmake 3.15 required by QUDA ############################
