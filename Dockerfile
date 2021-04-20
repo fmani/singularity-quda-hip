@@ -99,13 +99,13 @@ RUN yum -y install rdma-core-devel.x86_64
 ############################ OpenMPI 3.1.4 installation ############################
 
 RUN mkdir /workdir
-RUN cd /workdir
+WORKDIR /workdir
 RUN version=3.1
 RUN build=4
-RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${version}.${build}.tar.gz
+ADD https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${version}.${build}.tar.gz .
 RUN tar -xvf /workdir/openmpi-${version}.${build}.tar.gz
 RUN rm -rf /workdir/openmpi-${version}.${build}.tar.gz
-RUN cd openmpi-${version}.${build}
+WORKDIR /workdir/openmpi-${version}.${build}
 RUN FC="gfortran"
 RUN CC="gcc"
 RUN CFLAGS="-g -O2 -march=core-avx2"
@@ -164,13 +164,13 @@ RUN export LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib:${LD_LIBRARY_PATH}
 ############################ Get cmake 3.15 required by QUDA ############################
 
 RUN yum install -y ncurses-devel
-RUN cd /workdir
+WORKDIR /workdir
 RUN version=3.15
 RUN build=1
 RUN wget https://cmake.org/files/v$version/cmake-$version.$build.tar.gz
 RUN tar -xzvf cmake-$version.$build.tar.gz
 RUN rm -rf cmake-$version.$build.tar.gz
-RUN cd cmake-$version.$build/
+WORKDIR /workdir/cmake-$version.$build/
 RUN ./bootstrap
 RUN make -j 2
 RUN make install
@@ -181,9 +181,9 @@ RUN cmake --version
 ########################## Compile QUDA with ROCm support ################################
 
 RUN yum install -y eigen3
-RUN cd /workdir
+WORKDIR /workdir
 RUN git clone https://github.com/lattice/quda.git
-RUN cd /workdir/quda
+WORKDIR /workdir/quda
 RUN mv /data/install_quda.sh /workdir/quda/.
 RUN git checkout feature/hip-compile-fixes
 #bash install_quda.sh
