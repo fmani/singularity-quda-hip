@@ -102,7 +102,7 @@ RUN mkdir /workdir
 WORKDIR /workdir
 ARG version=3.1 
 ARG build=4
-RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.4.tar.gz .
+RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.4.tar.gz 
 RUN tar -xvf /workdir/openmpi-3.1.4.tar.gz
 RUN rm -rf /workdir/openmpi-3.1.4.tar.gz
 WORKDIR /workdir/openmpi-3.1.4
