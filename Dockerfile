@@ -23,6 +23,7 @@ RUN yum -y install babeltrace \
        gettext \
        gcc-c++ \
        libgcc glibc.i686 \
+       gcc-gfortran \
        libcxx-devel \
        ncurses \
        ncurses-base \
@@ -103,12 +104,12 @@ WORKDIR /workdir
 RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.4.tar.gz
 RUN tar -xvf /workdir/openmpi-3.1.4.tar.gz
 WORKDIR /workdir/openmpi-3.1.4
-ARG FC="gfortran"
-ARG CC="gcc"
-ARG CFLAGS="-g -O2 -march=core-avx2"
-ARG CXXFLAGS="$CFLAGS"
-ARG FCFLAGS="-g -O2 -march=core-avx2"
-ARG LDFLAGS="-g -O2 -ldl -march=core-avx2"
+RUN export FC="gfortran"
+RUN export CC="gcc"
+RUN export CFLAGS="-g -O2 -march=core-avx2"
+RUN export CXXFLAGS="$CFLAGS"
+RUN export FCFLAGS="-g -O2 -march=core-avx2"
+RUN export LDFLAGS="-g -O2 -ldl -march=core-avx2"
 RUN ./configure --prefix=/opt/openmpi/3.1.4 FC=gfortran CC=gcc  --with-psm2=yes --with-memory-manager=none --enable-static=yes --with-pmix --with-pmi --with-pmi-libdir="/usr/lib64/" --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen
 
 RUN make -j 8
@@ -121,12 +122,9 @@ ARG MANPATH=/opt/openmpi/3.1.4/share/man:${MANPATH}
 ARG INFOPATH=/opt/openmpi/3.1.4/share/info:${INFOPATH}
 
 ############################ Add ROCm repos and compile ############################
-ARG name=ROCm
-ARG baseurl=https://repo.radeon.com/rocm/yum/4.0
-ARG enabled=1
-ARG gpgcheck=1
-RUN gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key' > /etc/yum.repos.d/rocm.repo
+RUN printf '[ROCm]\nname=ROCm\nbaseurl=https://repo.radeon.com/rocm/yum/rpm\nenabled=1\ngpgcheck=1\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key' > /etc/yum.repos.d/rocm.repo
 
+RUN cat /etc/yum.repos.d/rocm.repo
 
 RUN yum clean all
 
@@ -181,7 +179,7 @@ RUN yum install -y eigen3
 WORKDIR /workdir
 RUN git clone https://github.com/lattice/quda.git
 WORKDIR /workdir/quda
-RUN mv /data/install_quda.sh /workdir/quda/.
+COPY install_quda.sh /workdir/quda/.
 RUN git checkout feature/hip-compile-fixes
 #bash install_quda.sh
 

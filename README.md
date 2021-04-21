@@ -1,3 +1,6 @@
+# Important
+Due to [recent developments](https://singularityhub.github.io/singularityhub-docs/2021/going-read-only/) Singularity hub will not allow to build containers anymore. Currently migrating to docker hub.
+
 [![https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg](https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg)](https://singularity-hub.org/collections/5325)
 # singularity-quda-hip
 Singularity recipe allowing to set up an enviroment where [QUDA](https://github.com/lattice/quda/tree/feature/hip-compile-fixes) can be built. Currently supports [Scientific Linux 7](https://hub.docker.com/r/scientificlinux/sl) systems.
