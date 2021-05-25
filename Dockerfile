@@ -132,6 +132,7 @@ RUN yum -y install rocm-dev \
        	       hipblas \
 	       hipcub \
 	       hipsparse \
+	       hipfft \
 	       miopen-hip \
 	       miopengemm \
 	       rccl \
